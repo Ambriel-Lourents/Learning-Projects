@@ -3,10 +3,10 @@ All the different projects and stuff i'd be learning/making from school and at h
 
 Current projects :
 
-Calculator
-Weather APP
-Keylogger
-Day/Night
-Website with db (Pen Testing)
-Cryptography
+Calculator <br>
+Weather APP <br>
+Keylogger <br>
+Day/Night <br>
+Website with db (Pen Testing) <br>
+Cryptography <br>
 
