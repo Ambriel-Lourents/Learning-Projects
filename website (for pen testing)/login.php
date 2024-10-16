@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $conn = new mysqli('localhost', 'root', '', 'user_system');
 
@@ -18,7 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->fetch();
 
     if (password_verify($password, $hashed_password)) {
+        // this basically checks if the username is stored in the database.
+        $_SESSION['username'] = $username;
         echo "Login successful!";
+        header("Location: index.php");
+        exit();
     } else {
         echo "Invalid credentials.";
     }
