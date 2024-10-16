@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&family=Source+Sans+3&display=swap" rel="stylesheet" />
+    <title>Weather App</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="main-box">
+            <div class="top-content">
+                <img src="—Pngtree—vector location icon_3989706.png" style="width: 45px" alt="location" />
+                <p class="locationText">Location</p>
+                <div class="search-container hidden">
+                    <input type="text" id="searchInput" placeholder="Search location" />
+                    <div id="dropdown" class="dropdown"></div>
+                </div>
+                <img class="search-icon" src="search.png" alt="search" />
+            </div>
+            <div class="mid-content">
+                <div class="temperature-overlay">
+                    <p id="temperature">0°C</p>
+                </div>
+                <img id="weatherImage" src="cloudy.png" alt="clouds" style="width: 300px" />
+            </div>
+            <div class="bottom-content">
+                <img src="wind.png" alt="wind" style="width: 35px" />
+                <p class="windText">MPH</p>
+                <img class="humi-icon" src="humidity.png" alt="humid" style="width: 35px" />
+                <p class="humiText">%</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const locationText = document.querySelector(".locationText");
+        const apiKey = "c6ea35233a5177bddf29f2298d439123";
+
+        // Select the image, humidity, and wind elements in your HTML
+        const weatherImage = document.getElementById("weatherImage");
+        const humiText = document.querySelector(".humiText");
+        const windText = document.querySelector(".windText");
+
+        // Function to fetch weather data based on latitude and longitude
+        async function fetchWeatherData(latitude, longitude) {
+            try {
+                // Fetch the location data based on latitude and longitude
+                const locationResponse = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                );
+
+                if (locationResponse.ok) {
+                    const locationData = await locationResponse.json();
+                    if (locationData.address && locationData.address.country) {
+                        locationText.textContent = locationData.address.country;
+                    } else {
+                        locationText.textContent = "Location data not available";
+                    }
+                } else {
+                    locationText.textContent = "Failed to retrieve location data";
+                }
+
+                // Fetch the weather data based on latitude and longitude
+                const weatherResponse = await fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`
+                );
+
+                if (weatherResponse.ok) {
+                    const weatherData = await weatherResponse.json();
+                    const temperature = Math.round(weatherData.main.temp);
+                    const temperatureElement = document.getElementById("temperature");
+                    const humidity = weatherData.main.humidity;
+                    const windSpeed = weatherData.wind.speed;
+                    const weatherCondition = weatherData.weather[0].main.toLowerCase();
+
+                    // Define the image based on weather condition
+                    let imageName;
+                    switch (weatherCondition) {
+                        case "rain":
+                        case "drizzle":
+                        case "thunderstorm":
+                            imageName = "storm.png";
+                            break;
+                        case "clear":
+                            imageName = "cloudy.png";
+                            break;
+                        case "clouds":
+                            imageName = "cloudy-day.png";
+                            break;
+                        default:
+                            imageName = "cloudy.png"; // Default image for other conditions
+                    }
+
+                    // Set the image source based on the condition
+                    weatherImage.src = imageName;
+
+                    // Display temperature, humidity, and wind details in your HTML
+                    humiText.textContent = `${humidity}%`;
+                    windText.textContent = `${windSpeed} MPH`;
+                    temperatureElement.textContent = `${temperature}°C`;
+                } else {
+                    console.error("Error getting weather data:", weatherResponse.status);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        // Function to search for a location
+        async function searchLocation(query) {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${query}`
+            );
+            if (response.ok) {
+                return await response.json();
+            } else {
+                console.error("Error fetching location data:", response.status);
+                return [];
+            }
+        }
+
+        // Handle the input in the search box
+        document.getElementById("searchInput").addEventListener("input", async (e) => {
+            const query = e.target.value;
+            if (query.length > 2) {
+                const locations = await searchLocation(query);
+                const dropdown = document.getElementById("dropdown");
+                dropdown.innerHTML = "";
+                locations.forEach((location) => {
+                    const option = document.createElement("div");
+                    option.textContent = location.display_name;
+                    option.addEventListener("click", () => {
+                        fetchWeatherData(location.lat, location.lon);
+                        dropdown.innerHTML = "";
+                        document.getElementById("searchInput").value = location.display_name;
+                    });
+                    dropdown.appendChild(option);
+                });
+            }
+        });
+
+        // Toggle search bar visibility
+        document.querySelector(".search-icon").addEventListener("click", () => {
+            const searchContainer = document.querySelector(".search-container");
+            searchContainer.classList.toggle("hidden");
+            document.getElementById("searchInput").focus();
+        });
+
+        // Wait for the window to load before fetching geolocation data
+        window.addEventListener("load", () => {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    async function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        fetchWeatherData(latitude, longitude);
+                    },
+                    function (error) {
+                        locationText.textContent = "Failed to retrieve location";
+                        console.error("Error getting location:", error);
+                    }
+                );
+            } else {
+                locationText.textContent = "Geolocation is not supported by your browser";
+            }
+        });
+    </script>
+</body>
+</html>

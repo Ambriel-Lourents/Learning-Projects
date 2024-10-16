@@ -1,0 +1,133 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.main-container {
+  width: 100%;
+  height: 60.3rem;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(29, 90, 143);
+}
+
+.main-box {
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+  width: 500px;
+  height: 600px;
+  text-align: center;
+  border-radius: 30px;
+  position: relative;
+  margin-top: 10rem;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  font: sans-serif;
+}
+
+.top-content {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  top: 1rem; /* Adjust as necessary */
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.loc-text {
+  cursor: pointer;
+}
+
+.search-icon {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.search-container {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 300px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 5px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.dropdown div {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dropdown div:hover {
+  background-color: #f0f0f0;
+}
+
+.hidden {
+  display: none;
+}
+
+.mid-content {
+  margin-top: 8rem;
+}
+
+.bottom-content {
+  margin-top: 5rem;
+  gap: 10rem;
+  width: 85%;
+  display: flex;
+  align-items: center;
+}
+
+p {
+  color: black;
+}
+
+.windText {
+  margin-left: -9rem;
+}
+
+.humiText {
+  margin-left: -9rem;
+}
+
+.humi-icon {
+  margin-left: 6rem;
+}
+
+.temperature-overlay {
+  position: relative;
+}
+
+#temperature {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+  font-size: 1.6rem;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  font: sans-serif;
+}
