@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <h1 id="dn">Day or Night</h1>
+      <button type="button" id="day" onclick="myFunction()">Day!</button>
+      <button type="button" id="night" onclick="myFunction2()">Night!</button>
+    </div>
+
+    <script>
+      function myFunction(element, color) {
+        document.getElementsByTagName("BODY")[0].style.backgroundColor =
+          "white";
+
+        document.getElementById("dn").style.color = "black";
+      }
+      function myFunction2(element, color) {
+        document.getElementsByTagName("BODY")[0].style.backgroundColor =
+          "black";
+        document.getElementById("dn").style.color = "white";
+      }
+    </script>
+  </body>
+</html>
