@@ -4,9 +4,9 @@ from cryptography.fernet import Fernet
 import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for session management and flashing messages
-app.config['UPLOAD_FOLDER'] = 'uploads'  # Folder to store uploaded files
-app.config['DECRYPTED_FOLDER'] = 'decrypted'  # Folder for decrypted files
+app.secret_key = 'your_secret_key'  
+app.config['UPLOAD_FOLDER'] = 'uploads'  
+app.config['DECRYPTED_FOLDER'] = 'decrypted'  
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['DECRYPTED_FOLDER'], exist_ok=True)
 
@@ -38,15 +38,15 @@ def encrypt_file():
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(file_path)
 
-    key = generate_key()  # Generate a new key each time
+    key = generate_key()  
     fernet = Fernet(key)
 
-    with open(file_path, "rb") as f:
+    with open(file_path, "rb") as f:  
         original_data = f.read()
 
     encrypted_data = fernet.encrypt(original_data)
 
-    with open(file_path + ".enc", "wb") as encrypted_file:
+    with open(file_path + ".enc", "wb") as encrypted_file:  
         encrypted_file.write(encrypted_data)
 
     flash(f"{filename} has been encrypted successfully!")
@@ -70,13 +70,13 @@ def decrypt_file():
         key = load_key()
         fernet = Fernet(key)
 
-        with open(file_path, "rb") as encrypted_file:
+        with open(file_path, "rb") as encrypted_file:  
             encrypted_data = encrypted_file.read()
 
         decrypted_data = fernet.decrypt(encrypted_data)
 
         decrypted_file_path = os.path.join(app.config['DECRYPTED_FOLDER'], filename.replace(".enc", "_decrypted"))
-        with open(decrypted_file_path, "wb") as decrypted_file:
+        with open(decrypted_file_path, "wb") as decrypted_file:  
             decrypted_file.write(decrypted_data)
 
         flash(f"{filename} has been decrypted successfully!")
